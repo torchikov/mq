@@ -10,7 +10,7 @@ import java.io.OutputStream;
 /**
  * Created by root on 21.11.16.
  */
-public interface Parser {
-    Object getObject(Node node, Class<?> clazz) throws JAXBException;
-    void saveObject(OutputStream os, Object object) throws JAXBException;
+public interface Parser<T1, T2> {
+    T1 getObject(Node node, Class<T1> clazz) throws JAXBException;
+    void saveObject(OutputStream os, T2 object) throws JAXBException;
 }

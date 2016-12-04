@@ -50,20 +50,21 @@ public class JmsMessageListener implements SessionAwareMessageListener<TextMessa
             inputStream.close();
             document.getDocumentElement().normalize();
             String rootElement = document.getDocumentElement().getNodeName();
-            Parser parser = new JaxbParser();
             OutputStream outputStream = new ByteArrayOutputStream();
 
             switch (rootElement) {
                 case "personRequest":
-                    PersonRequest personRequest = (PersonRequest) parser.getObject(document.getDocumentElement().getParentNode(), PersonRequest.class);
+                    Parser<PersonRequest, Person> parserPerson = new JaxbParser<>();
+                    PersonRequest personRequest = parserPerson.getObject(document.getDocumentElement().getParentNode(), PersonRequest.class);
                     Person person = persons.get(personRequest.getPersonId());
-                    parser.saveObject(outputStream, person);
+                    parserPerson.saveObject(outputStream, person);
                     sendResponse(outputStream, session);
                     break;
                 case "organizationRequest":
-                    OrganizationRequest organizationRequest = (OrganizationRequest) parser.getObject(document.getDocumentElement().getParentNode(), OrganizationRequest.class);
+                    Parser<OrganizationRequest, Organization> parserOrganization = new JaxbParser<>();
+                    OrganizationRequest organizationRequest = parserOrganization.getObject(document.getDocumentElement().getParentNode(), OrganizationRequest.class);
                     Organization organization = organizations.get(organizationRequest.getOrganizationId());
-                    parser.saveObject(outputStream, organization);
+                    parserOrganization.saveObject(outputStream, organization);
                     sendResponse(outputStream, session);
                 default:
                     break;

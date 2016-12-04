@@ -23,12 +23,13 @@ public class SpringConfig {
     }
 
     @Bean
-    CachingConnectionFactory connectionFactory(){
-        return new CachingConnectionFactory(amqConnectionFactory());
+    CachingConnectionFactory connectionFactory(ActiveMQConnectionFactory amqConnectionFactory){
+        return new CachingConnectionFactory(amqConnectionFactory);
     }
 
     @Bean
-    DefaultMessageListenerContainer messageListenerContainer(CachingConnectionFactory connectionFactory, JmsMessageListener jmsMessageListener){
+    DefaultMessageListenerContainer messageListenerContainer(CachingConnectionFactory connectionFactory,
+                                                             JmsMessageListener jmsMessageListener){
         DefaultMessageListenerContainer container = new DefaultMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
         container.setDestinationName("IN");
